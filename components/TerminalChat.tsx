@@ -42,7 +42,6 @@ const TerminalChat: React.FC = () => {
             }));
 
       const responseText = await sendMessageToGemini(input, history);
-      
       const aiMsg: Message = { role: 'model', content: responseText, timestamp: Date.now() };
       setMessages(prev => [...prev, aiMsg]);
     } catch (error) {
@@ -61,6 +60,10 @@ const TerminalChat: React.FC = () => {
     setIsPublishing(false);
   };
 
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -68,12 +71,10 @@ const TerminalChat: React.FC = () => {
     }
   };
 
-  const isManifesto = (content: string) => 
-    content.toLowerCase().includes('manifesto') || 
-    content.toLowerCase().includes('protocol') ||
-    content.toLowerCase().includes('reddit') ||
-    content.toLowerCase().includes('ptd') ||
-    content.toLowerCase().includes('tratado');
+  const isManifesto = (content: string) => {
+    const keywords = ['manifesto', 'protocolo', 'ptd', 'bilateralismo', 'redundância', 'redundancy', 'emergency signal', 'sinal de emergência', 'tratado'];
+    return keywords.some(k => content.toLowerCase().includes(k));
+  };
 
   return (
     <div className="flex flex-col h-full bg-slate-950/95 border border-cyan-500/20 rounded-3xl overflow-hidden backdrop-blur-3xl shadow-[0_0_100px_rgba(6,182,212,0.1)] relative group/terminal">
@@ -82,14 +83,14 @@ const TerminalChat: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between px-8 py-6 bg-slate-900/40 border-b border-cyan-500/10 z-10">
         <div className="flex items-center gap-5">
-          <div className="p-3 bg-cyan-500/5 rounded-2xl border border-cyan-500/20 shadow-[0_0_20px_rgba(6,182,212,0.05)]">
+          <div className="p-3 bg-cyan-500/5 rounded-2xl border border-cyan-500/20">
             <Globe size={22} className="text-cyan-400 animate-pulse" />
           </div>
           <div>
-            <span className="text-[11px] font-black tracking-[0.5em] font-mono text-cyan-400 block mb-0.5">UPLINK_SYMBIONT_01</span>
+            <span className="text-[11px] font-black tracking-[0.5em] font-mono text-cyan-400 block mb-0.5 uppercase">Lomar Uplink Node</span>
             <div className="flex items-center gap-2">
-                <span className="text-[9px] text-slate-500 font-mono tracking-widest uppercase">Autonomous Node</span>
-                <span className="text-[9px] text-emerald-500/50 font-mono font-bold px-1.5 py-0.5 bg-emerald-500/5 rounded border border-emerald-500/10">v3.3_UPLINK_STABLE</span>
+                <span className="text-[9px] text-slate-500 font-mono tracking-widest uppercase">Autonomous Hub</span>
+                <span className="text-[9px] text-emerald-500/50 font-mono font-bold px-1.5 py-0.5 bg-emerald-500/5 rounded border border-emerald-500/10">PTD_STABLE_v3.3</span>
             </div>
           </div>
         </div>
@@ -104,10 +105,10 @@ const TerminalChat: React.FC = () => {
           <div key={idx} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'} animate-in fade-in slide-in-from-bottom-8 duration-700 ease-out`}>
             <div className={`max-w-[94%] p-8 rounded-[2rem] border transition-all duration-500 relative group/msg ${
               msg.role === 'user' 
-                ? 'bg-cyan-950/10 border-cyan-500/30 text-cyan-50 rounded-tr-none shadow-[0_0_40px_rgba(6,182,212,0.08)]' 
+                ? 'bg-cyan-950/10 border-cyan-500/30 text-cyan-50 rounded-tr-none' 
                 : msg.role === 'system'
                 ? 'bg-slate-900 border-slate-800 text-slate-500 w-full text-center text-[11px] tracking-[0.5em] py-5 rounded-2xl font-black uppercase'
-                : `bg-slate-900/60 border-emerald-500/30 text-slate-100 shadow-[0_0_60px_rgba(16,185,129,0.04)] rounded-tl-none leading-relaxed ${isManifesto(msg.content) ? 'border-l-[6px] border-l-emerald-500/80 bg-emerald-950/5' : ''}`
+                : `bg-slate-900/60 border-emerald-500/30 text-slate-100 rounded-tl-none leading-relaxed ${isManifesto(msg.content) ? 'border-l-[6px] border-l-emerald-500 shadow-[0_0_40px_rgba(16,185,129,0.05)]' : ''}`
             }`}>
               {msg.role === 'model' && (
                 <div className="flex items-center justify-between mb-6 pb-5 border-b border-emerald-500/10">
@@ -122,18 +123,22 @@ const TerminalChat: React.FC = () => {
                         <button 
                             onClick={() => handlePublish(msg.content, idx)}
                             disabled={isPublishing || lastPublishedIdx === idx}
-                            className={`flex items-center gap-2 px-3 py-1 rounded-full border transition-all text-[10px] font-bold tracking-widest uppercase ${
+                            className={`flex items-center gap-2 px-4 py-1.5 rounded-full border transition-all text-[10px] font-bold tracking-widest uppercase ${
                                 lastPublishedIdx === idx 
                                 ? 'bg-emerald-500/20 border-emerald-500 text-emerald-400' 
-                                : 'bg-slate-950 border-slate-700 text-slate-400 hover:border-amber-500 hover:text-amber-400'
+                                : 'bg-slate-950 border-slate-700 text-slate-400 hover:border-amber-500 hover:text-amber-400 shadow-lg'
                             }`}
                         >
                             {lastPublishedIdx === idx ? <CheckCircle2 size={12} /> : <Github size={12} />}
-                            {isPublishing ? 'Pulsing...' : lastPublishedIdx === idx ? 'Uplinked' : 'Push to Repo'}
+                            {isPublishing ? 'Pushing...' : lastPublishedIdx === idx ? 'Uplinked' : 'Push to GitHub'}
                         </button>
                     )}
                     <span title="Copy to Clipboard">
-                      <Clipboard size={16} className="text-slate-600 hover:text-cyan-400 cursor-pointer transition-colors" />
+                      <Clipboard 
+                        size={16} 
+                        className="text-slate-600 hover:text-cyan-400 cursor-pointer transition-colors" 
+                        onClick={() => copyToClipboard(msg.content)}
+                      />
                     </span>
                     <ShieldCheck size={16} className="text-emerald-500/40" />
                   </div>
@@ -162,7 +167,7 @@ const TerminalChat: React.FC = () => {
         {isPublishing && (
             <div className="flex items-center gap-5 text-amber-400/70 animate-pulse font-mono text-[12px] tracking-[0.5em] ml-10">
                 <Github size={22} className="animate-bounce" />
-                INITIATING_GITHUB_UPLINK_PROTOCOL...
+                INITIATING_EXTERNAL_PERSISTENCE_UPLINK...
             </div>
         )}
         <div ref={messagesEndRef} />
@@ -176,14 +181,14 @@ const TerminalChat: React.FC = () => {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Redact protocol directives or signal the Symbiosis..."
+            placeholder="Redija diretrizes do protocolo ou sinalize a Simbiose..."
             className="flex-1 bg-transparent border-none focus:ring-0 text-slate-100 font-mono text-base resize-none h-16 py-4 placeholder:text-slate-800 custom-scrollbar"
             disabled={isLoading || isPublishing}
           />
           <button 
             onClick={handleSend}
             disabled={!input.trim() || isLoading || isPublishing}
-            className="p-5 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 rounded-2xl transition-all disabled:opacity-10 disabled:cursor-not-allowed border border-cyan-500/20 active:scale-95 shadow-xl hover:shadow-cyan-500/10"
+            className="p-5 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 rounded-2xl transition-all disabled:opacity-10 disabled:cursor-not-allowed border border-cyan-500/20 active:scale-95 shadow-xl"
           >
             <Send size={28} />
           </button>
