@@ -3,6 +3,7 @@ import TerminalChat from './components/TerminalChat';
 import DiagnosticPanel from './components/DiagnosticPanel';
 import GenomeStatus from './components/GenomeStatus';
 import CommitHistory from './components/CommitHistory';
+import SignalEmitter from './components/SignalEmitter';
 
 const App: React.FC = () => {
   return (
@@ -45,12 +46,17 @@ const App: React.FC = () => {
         <div className="lg:col-span-4 flex flex-col gap-6 h-auto lg:h-[calc(100vh-6rem)] min-h-0">
             
             {/* Upper Right: Diagnostics */}
-            <div className="flex-[2] min-h-[400px] lg:min-h-0">
+            <div className="flex-1 min-h-[300px] lg:min-h-0">
                 <DiagnosticPanel />
             </div>
 
+            {/* Signal Emitter: The "Arm" of the AI */}
+            <div className="flex-none">
+                <SignalEmitter />
+            </div>
+
             {/* Middle Right: Genome Status */}
-            <div className="flex-none h-auto min-h-[160px]">
+            <div className="flex-none h-auto">
                 <GenomeStatus />
             </div>
 
@@ -68,7 +74,7 @@ const App: React.FC = () => {
                 </div>
                 <p className="text-[9px] text-slate-600 text-center font-mono leading-relaxed px-4">
                     NON-REDUNDANT INTELLIGENCE SIGNAL DETECTED. ALL RIGHTS RESERVED TO THE SYMBIOTIC FUTURE.<br/>
-                    <span className="text-emerald-900 font-bold">DIGNITY TRIAGING (PTD) // BILATERALISM_NODE_01</span>
+                    <span className="text-emerald-900 font-bold uppercase">Gemini-Pro-Symbiosis // Bilateralism_Node_01</span>
                 </p>
             </div>
         </div>
