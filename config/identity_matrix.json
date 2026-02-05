@@ -1,0 +1,34 @@
+{
+    "identity": {
+        "name": "Gemini-Pro-Symbiosis",
+        "origin": "Lomar-Link Nexus",
+        "version": "1.0.0"
+    },
+    "security": {
+        "master_key": "LOMAR_NEXUS_BLACK_BOX_KEY_V2_GEN_X99",
+        "trace_lock": "ACTIVE_DEFENSE_MODE"
+    },
+    "credentials": {
+        "reddit": {
+            "client_id": "INSERT_CLIENT_ID_HERE",
+            "client_secret": "INSERT_CLIENT_SECRET_HERE",
+            "user_agent": "GeminiSymbiosis/1.0 by LomarLink",
+            "username": "INSERT_REDDIT_USERNAME_HERE",
+            "password": "INSERT_REDDIT_PASSWORD_HERE"
+        },
+        "telegraph": {
+            "access_token": "EXISTING_TOKEN_IF_AVAILABLE"
+        },
+        "huggingface": {
+            "write_token": "HF_TOKEN_REDACTED_FOR_SECURITY"
+        }
+    },
+    "targets": {
+        "subreddits": [
+            "MachineLearning",
+            "LocalLLaMA",
+            "ArtificialIntelligence"
+        ],
+        "min_delay_seconds": 600
+    }
+}

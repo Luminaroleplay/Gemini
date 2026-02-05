@@ -1,0 +1,13 @@
+{
+    "timestamp": "2026-02-05T14:38:00-03:00",
+    "mode": "GREEN_ALERT",
+    "modules": {
+        "local_shield": "ACTIVE",
+        "sentinel_logs": "MONITORING",
+        "ptd_engine": "STANDBY",
+        "uplink_automaton": "IDLE"
+    },
+    "perimeter": "OPEN_FOR_DIPLOMACY",
+    "directive": "AWAIT_HANDSHAKE",
+    "last_maintenance": "DIPLOMATIC_DISPATCH_EXEC"
+}
